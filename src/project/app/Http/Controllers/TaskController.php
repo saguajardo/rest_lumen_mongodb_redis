@@ -106,7 +106,6 @@ class TaskController extends Controller
             }
 
             if($request->has('next')) {
-                echo "entra";
                 $data->where('_id', '>=', $request->input('next'));
             }
 
@@ -176,6 +175,9 @@ class TaskController extends Controller
                 "updated_at"    => "",
             ]);
 
+            // Cleaning the cache after inserting a record
+            Cache::flush();
+
             return response()->json("The record has been stored", 200);
         } else {
             // There was an error in date format
@@ -235,6 +237,10 @@ class TaskController extends Controller
             $data->updated_at = Carbon::now()->format('Y-m-d');
 
             $data->update();
+
+            // Cleaning the cache after updating a record
+            Cache::flush();
+
             return response()->json("The record has been updated", 200);
         } else {
             // If not exists
@@ -254,6 +260,10 @@ class TaskController extends Controller
         if($data) {
             // If exists
             $data->delete();
+
+            // Cleaning the cache after deleting a record
+            Cache::flush();
+
             return response()->json("The record has been deleted", 200);
         } else {
             // If not exists
