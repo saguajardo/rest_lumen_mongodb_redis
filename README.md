@@ -62,7 +62,7 @@ DB_PASSWORD=123456
 
 ***INFO***: These credentials are obtained from the installation of mongoDB
 
-***Crear Collection DB***: To create the collection in mongoDB, you must execute the following command artisan in the directory C:\xampp\htdocs\redis\project\ from the command prompt (cmd).
+***Create Collection DB***: To create the collection in mongoDB, you must execute the following command artisan in the directory C:\xampp\htdocs\redis\project\ from the command prompt (cmd).
 
 ```
 php artisan migrate
