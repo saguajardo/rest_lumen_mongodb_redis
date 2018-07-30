@@ -27,11 +27,7 @@ extension=php_mongodb.dll
 
 **WARNING**: The old mongo PHP driver is not supported anymore in versions >= 3.0.
 
-***Installing MongoDB***: Below is the link to the documentation on how to install Mongo DB
-
-```
-https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
-```
+***Installing MongoDB***: Below is the link to the documentation on how to install Mongo DB https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
 
 ***Installing Redis***:
 
