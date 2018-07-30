@@ -38,12 +38,26 @@ class TaskController extends Controller
     public function list(Request $request) {
 
         if($request->has('id')) {
-            $task = Task::find($request->input('id'));
 
-            return $task->toJson();
+            // Ger input ID
+            $id = $request->input('id');
+
+            // Use of Redis cache
+            $task = Cache::remember('task_id_' . $request->input('id'), 10, function() use ($id) {
+                return Task::find($id);
+            });
+
+            if($task) {
+                return $task->toJson();
+            } else {
+                return response()->json("Error: No record found for that id", 400);
+            }
         } else {
             // Prepare query
             $data = Task::query();
+
+            // Set key to Cache
+            $key = 'task';
 
             // If exists, add due_date filter
             if($request->has('due_date')) {
@@ -54,11 +68,12 @@ class TaskController extends Controller
 
                 // Valid that the date format is Y-m-d
                 if($dt !== false && !array_sum($dt->getLastErrors())) {
-                    $data = $data->where('due_date', $request->input('due_date'));
+                    $data = $data->where('due_date', $date);
                 } else {
                     // There was an error in date format
                     return response()->json("Validity error: Field due_date must be in format Y-m-d", 400);
                 }
+                $key .= '_' . $date;
             }
 
             // If exists, add completed filter
@@ -71,6 +86,8 @@ class TaskController extends Controller
                     $complete = "false";
                 }
                 $data = $data->where('completed', $complete);
+
+                $key .=  '_' . $completed;
             }
 
             // If exists, add created_at filter
@@ -87,6 +104,8 @@ class TaskController extends Controller
                     // There was an error in date format
                     return response()->json("Validity error: Field date_creation must be in format Y-m-d", 400);
                 }
+
+                $key .= '_' . $dateCreation;
             }
 
             // If exists, add updated_at filter
@@ -103,15 +122,21 @@ class TaskController extends Controller
                     // There was an error in date format
                     return response()->json("Validity error: Field date_update must be in format Y-m-d", 400);
                 }
+
+                $key .= '_' . $dateUpdate;
             }
 
             if($request->has('next')) {
                 $data->where('_id', '>=', $request->input('next'));
+                $key .= '_' . $request->input('next');
             }
 
-            // get all data
-            $results = $data->get()->take(6)->sortBy('_id');
-
+            // Use of Redis cache
+            $results = Cache::remember($key, 10, function() use ($data) {
+                // get all data
+                return $data->get()->take(6)->sortBy('_id');
+            });
+            
             $dataResult = array();
             // Format data result
             for($i = 0; $i < count($results); $i++) {
