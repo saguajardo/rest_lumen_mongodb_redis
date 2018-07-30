@@ -95,3 +95,7 @@ The parameters must be sent in JSON format, as shown below:
  "date_update": "2018-07-30"
 }
 ```
+
+***Aditional***: You can verify the installation in the following video, along with the tests carried out on the creation and use of mongoDB and Redis
+
+https://www.youtube.com/watch?v=qAriNKTkl3A
