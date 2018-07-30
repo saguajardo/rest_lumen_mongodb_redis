@@ -43,7 +43,7 @@ class TaskController extends Controller
             $id = $request->input('id');
 
             // Use of Redis cache
-            $task = Cache::remember('task_id_' . $request->input('id'), 10, function() use ($id) {
+            $task = Cache::remember('list_task_by_id_' . $request->input('id'), 10, function() use ($id) {
                 return Task::find($id);
             });
 
@@ -57,7 +57,7 @@ class TaskController extends Controller
             $data = Task::query();
 
             // Set key to Cache
-            $key = 'task';
+            $key = 'list_task';
 
             // If exists, add due_date filter
             if($request->has('due_date')) {
