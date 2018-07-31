@@ -1,0 +1,13 @@
+{
+    "name": "saguajardo/rest_lumen_mongodb_redis",
+    "description": "This project consists of the generation of an API Rest with Lumen, using mongoDB as a database. The list of stored records is cached with Redis",
+    "type": "Project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Guajardo",
+            "email": "guajardosebas@gmail.com"
+        }
+    ],
+    "require": {}
+}
